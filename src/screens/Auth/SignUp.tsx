@@ -8,6 +8,7 @@ import { InferType } from "yup";
 import { FormInput } from "../../components/FormInput";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
+import { api } from "../../services/axios";
 
 type signUpSchema = {
   name: string,
@@ -30,8 +31,12 @@ export function SignUp() {
   });
   const navigation = useNavigation<AuthNavigationProps>()
 
-  function handleRegister({name, email, password}: signUpSchema) {
-    console.log(name)
+  async function handleRegister({name, email, password}: signUpSchema) {
+    try {
+      await api.post('/users', {name, email, password});
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   function handleGoBack() {

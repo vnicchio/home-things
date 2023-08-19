@@ -2,12 +2,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { AuthRoutes } from "./auth.routes";
 import React from "react";
 import { AppRoutes } from "./app.routes";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../hooks/useAuth";
 
 export function Routes() {
+  const {user} = useAuth();
+
   return (
     <NavigationContainer >
-        <AppRoutes />
+        {user.id ? <AppRoutes /> : <AuthRoutes />}
     </NavigationContainer>
   )
 }
