@@ -1,12 +1,13 @@
 import { ReactNode, createContext, useState } from "react";
 import { UserDTO } from "../dtos/UserDTO";
 import { api } from "../services/axios";
-import { storageUserSave } from "../storage/userStorage";
-import { storageAuthTokenSave } from "../storage/authStorage";
+import { storageUserRemove, storageUserSave } from "../storage/userStorage";
+import { storageAuthTokenRemove, storageAuthTokenSave } from "../storage/authStorage";
 
 export type AuthContextProps = {
   user: UserDTO;
-  signIn: (email: string, password: string) => Promise<void>
+  signIn: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps)
@@ -16,7 +17,7 @@ type AuthContextProviderProps = {
 }
 
 export function AuthContextProvider({children}: AuthContextProviderProps) {
-  const [user, setUser] = useState<UserDTO>({} as UserDTO)
+  const [user, setUser] = useState<UserDTO>({} as UserDTO);
 
   function updateUserAndToken(user: UserDTO, token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -42,8 +43,18 @@ export function AuthContextProvider({children}: AuthContextProviderProps) {
     }
   }
 
+  async function signOut() {
+    try {
+      setUser({} as UserDTO);
+      await storageUserRemove();
+      await storageAuthTokenRemove();
+    } catch (error) {
+      throw error;
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{user, signIn}}>
+    <AuthContext.Provider value={{user, signIn, signOut}}>
     {children}
     </AuthContext.Provider>
   )
