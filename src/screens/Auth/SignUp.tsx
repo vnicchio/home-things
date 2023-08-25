@@ -9,6 +9,7 @@ import { FormInput } from "../../components/FormInput";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import { api } from "../../services/axios";
+import { useAuth } from "../../hooks/useAuth";
 
 type signUpSchema = {
   name: string,
@@ -31,9 +32,12 @@ export function SignUp() {
   });
   const navigation = useNavigation<AuthNavigationProps>()
 
+  const {signIn} = useAuth();
+
   async function handleRegister({name, email, password}: signUpSchema) {
     try {
       await api.post('/users', {name, email, password});
+      await signIn(email, password);
     } catch (error) {
       console.log(error)
     }
