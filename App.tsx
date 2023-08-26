@@ -1,5 +1,5 @@
-import { GluestackUIProvider, config, Box } from '@gluestack-ui/react';
-import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { GluestackUIProvider, config } from '@gluestack-ui/react';
+import { StatusBar } from 'react-native';
 import { Routes } from './src/routes';
 import { AuthContextProvider } from './src/contexts/AuthContext';
 

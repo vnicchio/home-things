@@ -1,4 +1,4 @@
-import { Button, ButtonIcon, ButtonText, Center, ChevronLeftIcon, Heading, Icon, Input, InputInput, Text, VStack } from "@gluestack-ui/react";
+import { Button, ButtonIcon, ButtonText, Center, ChevronLeftIcon, VStack } from "@gluestack-ui/react";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import { AuthNavigationProps } from "../../routes/auth.routes";
@@ -24,10 +24,10 @@ const createUserFormSchema = yup.object({
   password_confirmation: yup.string().required('Informe a senha').oneOf([yup.ref('password')], 'As senhas devem ser iguais')
 });
 
-type createUseFormData = InferType<typeof createUserFormSchema>
+type createUserFormData = InferType<typeof createUserFormSchema>
 
 export function SignUp() {
-  const {control, handleSubmit, formState: {errors}} = useForm<createUseFormData>({
+  const {control, handleSubmit, formState: {errors}} = useForm<createUserFormData>({
     resolver: yupResolver(createUserFormSchema)
   });
   const navigation = useNavigation<AuthNavigationProps>()
