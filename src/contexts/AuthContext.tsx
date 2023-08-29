@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 import { UserDTO } from "../dtos/UserDTO";
 import { api } from "../services/axios";
 import { storageUserRemove, storageUserSave } from "../storage/userStorage";
@@ -52,6 +52,14 @@ export function AuthContextProvider({children}: AuthContextProviderProps) {
       throw error;
     }
   }
+
+  useEffect(() => {
+    const subscribe = api.registerInterceptTokenManager(signOut);
+
+    return () => {
+      subscribe();
+    }
+  }, [])
 
   return (
     <AuthContext.Provider value={{user, signIn, signOut}}>
